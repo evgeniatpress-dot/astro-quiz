@@ -11,9 +11,14 @@
 html,body{
   min-height:100%;
   background:#0A2A2E url('bg.jpg') center top / cover no-repeat fixed;
-  color:#E8DDD0;
+  color:#F0EBE3;
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
   overflow-x:hidden; -webkit-tap-highlight-color:transparent;
+}
+body::before{
+  content:'';position:fixed;inset:0;
+  background:rgba(4,16,20,0.72);
+  z-index:0;pointer-events:none;
 }
 #bg-canvas{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;}
 #app{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;padding:32px 22px 48px;}
@@ -36,17 +41,17 @@ html,body{
 .cross{display:inline-block;color:#C9A84C;font-size:14px;opacity:.7;}
 .cross-lg{font-size:20px;opacity:.85;}
 
-.eyebrow{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#3EC89A;margin-bottom:10px;}
-h1{font-size:26px;line-height:1.25;margin:0 0 12px;font-weight:700;color:#E8DDD0;text-shadow:0 0 20px rgba(62,200,154,0.2);}
-p.lead{color:#8A8070;font-size:15px;line-height:1.6;margin:0 0 28px;}
+.eyebrow{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#5EDDB2;margin-bottom:10px;text-shadow:0 1px 6px rgba(0,0,0,0.9);}
+h1{font-size:26px;line-height:1.25;margin:0 0 12px;font-weight:700;color:#F5EFE6;text-shadow:0 2px 12px rgba(0,0,0,0.9),0 0 20px rgba(62,200,154,0.2);}
+p.lead{color:#C8C0B0;font-size:15px;line-height:1.6;margin:0 0 28px;text-shadow:0 1px 6px rgba(0,0,0,0.8);}
 .spacer{flex:1;}
 
 .card{
-  background:rgba(5,20,25,0.65);
-  border:1px solid rgba(201,168,76,0.25);
+  background:rgba(4,16,20,0.82);
+  border:1px solid rgba(201,168,76,0.3);
   border-radius:20px; padding:20px;
-  backdrop-filter:blur(12px);
-  box-shadow:0 4px 24px rgba(0,0,0,0.5),inset 0 1px 0 rgba(201,168,76,0.08);
+  backdrop-filter:blur(14px);
+  box-shadow:0 4px 24px rgba(0,0,0,0.7),inset 0 1px 0 rgba(201,168,76,0.1);
 }
 
 label{display:block;font-size:11px;color:#6A7060;margin:16px 0 7px;letter-spacing:.08em;text-transform:uppercase;}
@@ -82,16 +87,16 @@ select option{background:#0D120D;}
 .option{
   display:block;width:100%;text-align:left;
   padding:15px 17px;margin-bottom:11px;
-  border-radius:15px;border:1px solid rgba(62,200,154,0.15);
-  background:rgba(255,255,255,0.025);
-  color:#D8D0C0;font-size:15px;line-height:1.45;
+  border-radius:15px;border:1px solid rgba(201,168,76,0.2);
+  background:rgba(4,16,20,0.75);
+  color:#EDE8E0;font-size:15px;line-height:1.45;
   cursor:pointer;transition:all .2s;
 }
 .option:active,.option:hover{background:rgba(62,200,154,0.08);border-color:rgba(62,200,154,0.4);transform:translateX(3px);}
 
 .result-emoji{font-size:58px;text-align:center;margin:8px 0 8px;}
 .result-name{text-align:center;font-size:24px;font-weight:800;color:#5EDDB2;margin:0 0 20px;text-shadow:0 0 18px rgba(62,200,154,0.45);}
-.result-desc{font-size:15.5px;line-height:1.7;color:#D8D0C0;}
+.result-desc{font-size:15.5px;line-height:1.7;color:#EDE8E0;}
 
 /* Botanical SVG decor */
 .botanical{position:fixed;pointer-events:none;opacity:.18;z-index:0;}
