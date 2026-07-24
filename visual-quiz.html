@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Психологический тест — Евгения Дубровина</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{
+  min-height:100%;
+  background:#0A2A2E url('bg.jpg') center top / cover no-repeat fixed;
+  color:#F0EBE3;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  overflow-x:hidden;-webkit-tap-highlight-color:transparent;
+}
+body::before{content:'';position:fixed;inset:0;background:rgba(4,16,20,0.75);z-index:0;pointer-events:none;}
+#app{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;padding:24px 20px 48px;}
+.screen{display:none;flex:1;flex-direction:column;animation:fadeIn .4s ease;}
+.screen.active{display:flex;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+.eyebrow{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#5EDDB2;margin-bottom:10px;text-shadow:0 1px 6px rgba(0,0,0,.9);}
+h1{font-size:24px;line-height:1.3;margin:0 0 10px;font-weight:700;color:#F5EFE6;text-shadow:0 2px 12px rgba(0,0,0,.9);}
+p.lead{color:#C8C0B0;font-size:14px;line-height:1.6;margin:0 0 24px;text-shadow:0 1px 6px rgba(0,0,0,.8);}
+.spacer{flex:1;}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:100%;padding:15px 18px;margin-top:16px;
+  border:none;border-radius:999px;
+  background:linear-gradient(135deg,#5EDDB2,#2EAA7A);
+  color:#080C08;font-size:15px;font-weight:700;
+  cursor:pointer;transition:transform .15s,box-shadow .15s;
+  box-shadow:0 4px 20px rgba(62,200,154,.3);
+}
+.btn:active{transform:scale(.97);}
+.btn.ghost{background:transparent;color:#3EC89A;border:1px solid rgba(62,200,154,.4);box-shadow:none;}
+
+/* Progress */
+.progress-bar{display:flex;gap:6px;margin-bottom:20px;}
+.progress-bar .seg{flex:1;height:3px;border-radius:2px;background:rgba(62,200,154,.15);}
+.progress-bar .seg.done{background:#3EC89A;box-shadow:0 0 6px rgba(62,200,154,.5);}
+
+/* Question */
+.q-num{font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:#5EDDB2;margin-bottom:8px;text-shadow:0 1px 6px rgba(0,0,0,.9);}
+.q-title{font-size:17px;font-weight:600;line-height:1.4;margin-bottom:16px;color:#F0EBE3;text-shadow:0 1px 8px rgba(0,0,0,.9);}
+.q-img{width:100%;border-radius:16px;margin-bottom:16px;display:block;border:1px solid rgba(201,168,76,.2);box-shadow:0 4px 20px rgba(0,0,0,.5);}
+.q-prompt{font-size:13px;color:#A09080;margin-bottom:14px;text-align:center;letter-spacing:.05em;}
+.opt-btn{
+  display:block;width:100%;text-align:left;
+  padding:13px 16px;margin-bottom:10px;
+  border-radius:14px;border:1px solid rgba(201,168,76,.2);
+  background:rgba(4,16,20,.78);
+  color:#EDE8E0;font-size:14px;line-height:1.4;
+  cursor:pointer;transition:all .2s;
+}
+.opt-btn:active,.opt-btn:hover{background:rgba(62,200,154,.1);border-color:rgba(62,200,154,.4);transform:translateX(3px);}
+
+/* Answer reveal */
+.answer-box{
+  background:rgba(4,16,20,.85);
+  border:1px solid rgba(201,168,76,.3);
+  border-radius:16px;padding:18px;
+  margin-bottom:14px;
+  animation:fadeIn .35s ease;
+}
+.answer-label{font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:#C9A84C;margin-bottom:8px;}
+.answer-text{font-size:14.5px;line-height:1.65;color:#EDE8E0;}
+
+/* Summary */
+.summary-item{
+  background:rgba(4,16,20,.82);
+  border:1px solid rgba(201,168,76,.2);
+  border-radius:14px;padding:14px 16px;
+  margin-bottom:12px;
+}
+.summary-q{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:#5EDDB2;margin-bottom:6px;}
+.summary-a{font-size:13px;font-weight:600;color:#C9A84C;margin-bottom:4px;}
+.summary-desc{font-size:13px;line-height:1.55;color:#C8C0B0;}
+
+.cross{color:#C9A84C;font-size:18px;opacity:.8;}
+.moon-header{display:flex;justify-content:center;gap:14px;margin-bottom:20px;opacity:.85;}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- Welcome -->
+  <section class="screen active" id="screen-welcome">
+    <div class="spacer"></div>
+    <div class="moon-header"><span class="cross">✦</span><span class="cross" style="font-size:24px">✦</span><span class="cross">✦</span></div>
+    <div class="eyebrow">Психология · Евгения Дубровина</div>
+    <h1>Психологический тест</h1>
+    <p class="lead">5 картинок раскроют ваши страхи, склад ума, отношение к окружающим и то, кто вы есть на самом деле.</p>
+    <p class="lead" style="margin-top:-10px;">Смотрите на каждое изображение и выбирайте то, что заметили <strong style="color:#5EDDB2;">первым</strong>.</p>
+    <button class="btn" onclick="startQuiz()">Начать ✦</button>
+    <div class="spacer"></div>
+  </section>
+
+  <!-- Quiz -->
+  <section class="screen" id="screen-quiz">
+    <div class="progress-bar" id="progress"></div>
+    <div class="q-num" id="q-num"></div>
+    <div class="q-title" id="q-title"></div>
+    <img class="q-img" id="q-img" src="" alt="">
+    <div class="q-prompt">Что вы увидели первым?</div>
+    <div id="q-options"></div>
+    <div id="answer-area" style="display:none;">
+      <div class="answer-box">
+        <div class="answer-label">Ваш результат</div>
+        <div class="answer-text" id="answer-text"></div>
+      </div>
+      <button class="btn" id="btn-next" onclick="nextQ()">Далее →</button>
+    </div>
+  </section>
+
+  <!-- Summary -->
+  <section class="screen" id="screen-summary">
+    <div class="eyebrow" style="margin-top:8px;">Ваши результаты</div>
+    <h1>Что картинки рассказали о вас</h1>
+    <div id="summary-list" style="margin-top:16px;"></div>
+    <button class="btn" style="margin-top:8px;" onclick="openTg()">Задать мне вопрос</button>
+    <button class="btn ghost" onclick="restart()">Пройти ещё раз</button>
+    <div style="height:20px;"></div>
+  </section>
+
+</div>
+<script>
+const tg=window.Telegram?window.Telegram.WebApp:null;
+if(tg){tg.ready();tg.expand();}
+
+const QUESTIONS=[
+  {
+    title:"Ваши страхи",
+    img:"q1.jpg",
+    options:[
+      {label:"Лицо человека",text:"Вы часто боитесь оступиться и сделать неверный шаг. Иногда это чувство настолько сильное, что вы готовы отказаться от своей мечты ещё до того, как приблизитесь к ней. Опасение потерпеть неудачу становится барьером, мешающим двигаться вперёд."},
+      {label:"Человек в лодке",text:"Вашу душу нередко тревожит страх перед потерей близких. Ощущение нависшей угрозы сковывает, не давая расслабиться. Но важно не позволять мыслям о беде превращать жизнь в бесконечное ожидание."},
+      {label:"Рыба (вверху)",text:"С годами вера в лучшее ослабевает — кажется, что радость постоянно ускользает. Когда вы зацикливаетесь на неудачах, неудивительно, что пустота нарастает. От таких мыслей нужно постепенно избавляться."},
+    ]
+  },
+  {
+    title:"Ваш склад ума",
+    img:"q2.jpg",
+    options:[
+      {label:"Три медведя",text:"У вас аналитический склад ума. Вам нравится решать задачи логически и пошагово: разбивать проблему на части, определять приоритеты. Следуя этому подходу, вы решаете задачи эффективнее большинства."},
+      {label:"Горы",text:"У вас интуитивный стиль мышления. Вы полагаетесь на внутренний голос, и он вас редко подводит. Вы умеете выявлять общие закономерности там, где другие видят хаос, — и находить решения быстро."},
+    ]
+  },
+  {
+    title:"Как другие влияют на ваше мнение",
+    img:"q3.jpg",
+    options:[
+      {label:"Ветви деревьев",text:"Вы обладаете полной независимостью. У вас есть своё мнение обо всём, и хотя вы готовы выслушать других — это лишь для того, чтобы ещё раз убедиться в своей правоте."},
+      {label:"Пара птиц у гнезда",text:"Вы очень привязаны к семье и близкому кругу. Иногда это позволяет другим влиять на ваши решения больше, чем вам хотелось бы. Вы не всегда уверены в себе и спешите за советом к близким."},
+      {label:"Пустынный пейзаж",text:"Вы умеете адаптироваться к обстоятельствам. Это говорит о гибкости, но иногда и об отсутствии твёрдой позиции. Если вы подавляете свои желания, угождая другим — это сигнал: больше думайте о себе."},
+    ]
+  },
+  {
+    title:"Насколько вы организованы",
+    img:"q4.jpg",
+    options:[
+      {label:"Ручку",text:"Вас нелегко сбить с толку. Вы серьёзный человек — планирование, расчёт и самоорганизация ваши сильные стороны. Обратная сторона: вам сложно расслабиться и просто повеселиться."},
+      {label:"Одуванчик",text:"Вы лёгкий человек — в хорошем смысле. Вам сложно следовать чужим правилам, зато вы умеете расслабляться, переключать внимание и концентрироваться на позитиве. Это редкий дар."},
+    ]
+  },
+  {
+    title:"Кто вы есть на самом деле",
+    img:"q5.jpg",
+    options:[
+      {label:"Лицо",text:"Вы человек, который постоянно куда-то спешит. Совет: остановитесь, расставьте приоритеты и сделайте выбор в пользу настоящего момента."},
+      {label:"Огонь",text:"Вы серьёзно боитесь своих чувств. Совет: оставьте пустые переживания позади и не бойтесь действовать — чувства это ваша сила."},
+      {label:"Молящегося старца",text:"Вы человек, стремящийся контролировать свои эмоции. У вас редкий потенциал преодолевать трудности. Совет: верьте в свои силы — вы можете многого добиться."},
+      {label:"Двух ангелов",text:"Вы не всегда честны с собой. Совет: искренне признайтесь себе в своих желаниях — так будет легче понять, куда двигаться дальше."},
+      {label:"Одного ангела",text:"Вы внимательны к окружающим и живёте заботами о других. Совет: научитесь уделять время и себе — вы этого заслуживаете не меньше."},
+    ]
+  }
+];
+
+let cQ=0, answers=[];
+
+function startQuiz(){goTo('screen-quiz');renderQ();}
+
+function goTo(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function renderQ(){
+  const q=QUESTIONS[cQ];
+  // progress
+  const pb=document.getElementById('progress');pb.innerHTML='';
+  QUESTIONS.forEach((_,i)=>{const d=document.createElement('div');d.className='seg'+(i<cQ?' done':'');pb.appendChild(d);});
+  document.getElementById('q-num').textContent=`Вопрос ${cQ+1} из ${QUESTIONS.length}`;
+  document.getElementById('q-title').textContent=q.title;
+  document.getElementById('q-img').src=q.img+'?v='+Date.now();
+  // options
+  const ow=document.getElementById('q-options');ow.innerHTML='';
+  q.options.forEach((opt,i)=>{
+    const b=document.createElement('button');
+    b.className='opt-btn';
+    b.textContent=opt.label;
+    b.onclick=()=>selectAnswer(i);
+    ow.appendChild(b);
+  });
+  // hide answer
+  document.getElementById('answer-area').style.display='none';
+}
+
+function selectAnswer(i){
+  const q=QUESTIONS[cQ];
+  answers.push({title:q.title, chosen:q.options[i].label, text:q.options[i].text});
+  // disable all buttons
+  document.querySelectorAll('.opt-btn').forEach((b,idx)=>{
+    b.disabled=true;
+    if(idx===i)b.style.borderColor='rgba(62,200,154,.6)';b.style.opacity=idx===i?'1':'.4';
+  });
+  // show answer
+  document.getElementById('answer-text').textContent=q.options[i].text;
+  const aa=document.getElementById('answer-area');aa.style.display='block';
+  // last question
+  if(cQ===QUESTIONS.length-1){
+    document.getElementById('btn-next').textContent='Посмотреть итог →';
+  }
+  setTimeout(()=>aa.scrollIntoView({behavior:'smooth',block:'nearest'}),100);
+}
+
+function nextQ(){
+  cQ++;
+  if(cQ<QUESTIONS.length){renderQ();}
+  else{showSummary();}
+}
+
+function showSummary(){
+  goTo('screen-summary');
+  const list=document.getElementById('summary-list');list.innerHTML='';
+  answers.forEach(a=>{
+    const div=document.createElement('div');div.className='summary-item';
+    div.innerHTML=`<div class="summary-q">${a.title}</div><div class="summary-a">Вы увидели: ${a.chosen}</div><div class="summary-desc">${a.text}</div>`;
+    list.appendChild(div);
+  });
+}
+
+function openTg(){
+  const url='https://t.me/EvgeniyaDubrovina';
+  if(tg&&tg.openLink){tg.openLink(url);}else{window.open(url,'_blank');}
+}
+function restart(){cQ=0;answers=[];goTo('screen-welcome');}
+</script>
+</body>
+</html>
